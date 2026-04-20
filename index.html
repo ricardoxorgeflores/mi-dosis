@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Dosis</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%);
+      color: #1F2937;
+    }
+
+    header {
+      background: linear-gradient(135deg, #16A34A, #22C55E, #4ADE80);
+      color: white;
+      padding: 35px 20px;
+      box-shadow: 0 10px 30px rgba(34, 197, 94, 0.25);
+    }
+
+    .header-contenido {
+      width: 92%;
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-texto h1 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .header-texto p {
+      font-size: 16px;
+      opacity: 0.96;
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    .logo {
+      width: 90px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+    }
+
+    .estado-principal {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 18px 22px;
+      min-width: 270px;
+    }
+
+    .estado-principal h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .estado-principal p {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .resumen {
+      width: 92%;
+      max-width: 1250px;
+      margin: -25px auto 25px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .mini-tarjeta {
+      background: #FFFFFF;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      border: 1px solid #DCFCE7;
+    }
+
+    .mini-tarjeta h3 {
+      color: #16A34A;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .mini-tarjeta p {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1F2937;
+    }
+
+    .contenedor {
+      width: 92%;
+      max-width: 1250px;
+      margin: 0 auto 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 22px;
+    }
+
+    .tarjeta {
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid #DCFCE7;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.11);
+    }
+
+    .tarjeta h2 {
+      font-size: 21px;
+      margin-bottom: 18px;
+      color: #16A34A;
+    }
+
+    .tarjeta-ancha {
+      grid-column: 1 / -1;
+    }
+
+    .dato {
+      margin-bottom: 12px;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .etiqueta {
+      font-weight: bold;
+      color: #1F2937;
+    }
+
+    .estado {
+      display: inline-block;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .online {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .offline {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .pendiente {
+      background: #FEF9C3;
+      color: #854D0E;
+    }
+
+    .tomado {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .alerta {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    .normal {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .app {
+      background: #ECFCCB;
+      color: #3F6212;
+    }
+
+    .energia {
+      background: #BBF7D0;
+      color: #166534;
+    }
+
+    .botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.25s;
+    }
+
+    .btn-principal {
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      color: white;
+      box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-principal:hover {
+      transform: translateY(-2px);
+      opacity: 0.95;
+    }
+
+    .btn-secundario {
+      background: #DCFCE7;
+      color: #166534;
+    }
+
+    .btn-secundario:hover {
+      background: #BBF7D0;
+    }
+
+    .barra {
+      width: 100%;
+      height: 18px;
+      background: #E5E7EB;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progreso {
+      height: 100%;
+      background: linear-gradient(90deg, #22C55E, #16A34A);
+      width: 85%;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      line-height: 18px;
+      font-weight: bold;
+    }
+
+    .lista-notificaciones {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .lista-notificaciones li {
+      padding: 12px;
+      border-radius: 12px;
+      background: #F0FDF4;
+      margin-bottom: 10px;
+      border: 1px solid #DCFCE7;
+      font-size: 14px;
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+      margin-top: 12px;
+      border-radius: 16px;
+      border: 1px solid #DCFCE7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    table th, table td {
+      padding: 14px 12px;
+      text-align: left;
+      font-size: 14px;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    table th {
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 14px;
+    }
+
+    tr:hover td {
+      background: #F0FDF4;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #6B7280;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .header-texto h1 {
+        font-size: 28px;
+      }
+
+      .header-texto p {
+        font-size: 14px;
+      }
+
+      .mini-tarjeta p {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-contenido">
+      <div class="header-texto">
+        <img src="logo.png" alt="Logo Mi Dosis" class="logo">
+        <h1>Mi Dosis</h1>
+        <p>Aplicación web para el monitoreo del tratamiento, sincronización con aplicación móvil, recordatorios, control del dispositivo y seguimiento del cumplimiento del usuario.</p>
+      </div>
+
+      <div class="estado-principal">
+        <h3>Estado general del sistema</h3>
+        <p><strong>Usuario:</strong> Juan Pérez</p>
+        <p><strong>App móvil:</strong> Conectada</p>
+        <p><strong>Próxima toma:</strong> 14:00</p>
+      </div>
+    </div>
+  </header>
+
+  <section class="resumen">
+    <div class="mini-tarjeta">
+      <h3>Usuario activo</h3>
+      <p>Juan Pérez</p>
+    </div>
+
+    <div class="mini-tarjeta">
+      <h3>Edad</h3>
+      <p>55 años</p>
+    </div>
+
+    <div class="mini-tarjeta">
+      <h3>Próxima toma</h3>
+      <p id="resumenHora">14:00</p>
+    </div>
+
+    <div class="mini-tarjeta">
+      <h3>Cumplimiento</h3>
+      <p>85%</p>
+    </div>
+  </section>
+
+  <section class="contenedor">
+
+    <div class="tarjeta">
+      <h2>Usuario</h2>
+      <div class="dato"><span class="etiqueta">Nombre:</span> Juan Pérez</div>
+      <div class="dato"><span class="etiqueta">Edad:</span> 55 años</div>
+      <div class="dato"><span class="etiqueta">Observación:</span> Tomar la medicina después del desayuno</div>
+      <div class="dato"><span class="etiqueta">Contacto de emergencia:</span> 77777777</div>
+      <div class="dato"><span class="etiqueta">Cuidador asignado:</span> María Pérez</div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Dispositivo</h2>
+      <div class="dato"><span class="etiqueta">Nombre:</span> Pastillero P-01</div>
+      <div class="dato"><span class="etiqueta">Controlador:</span> Arduino / ESP32</div>
+      <div class="dato"><span class="etiqueta">Conexión:</span> <span id="conexion" class="estado online">En línea</span></div>
+      <div class="dato"><span class="etiqueta">Última sincronización:</span> <span id="sincronizacion">18/04/2026 - 10:30</span></div>
+      <div class="dato"><span class="etiqueta">Servo dispensador:</span> Operativo</div>
+      <div class="dato"><span class="etiqueta">Energía:</span> <span class="estado energia">92% batería</span></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Aplicación Móvil</h2>
+      <div class="dato"><span class="etiqueta">Estado:</span> <span id="estadoApp" class="estado app">Conectada</span></div>
+      <div class="dato"><span class="etiqueta">Última sincronización app:</span> <span id="syncApp">18/04/2026 - 11:05</span></div>
+      <div class="dato"><span class="etiqueta">Recordatorio enviado:</span> <span id="recordatorioEstado">Sí</span></div>
+      <div class="dato"><span class="etiqueta">Confirmación desde app:</span> <span id="confirmacionApp">Pendiente</span></div>
+      <div class="botones">
+        <button class="btn-principal" onclick="sincronizarApp()">Sincronizar app</button>
+        <button class="btn-secundario" onclick="enviarRecordatorio()">Enviar recordatorio</button>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Próxima Toma</h2>
+      <div class="dato"><span class="etiqueta">Medicamento:</span> Losartán 50 mg</div>
+      <div class="dato"><span class="etiqueta">Hora programada:</span> <span id="horaToma">14:00</span></div>
+      <div class="dato"><span class="etiqueta">Compartimento:</span> 3</div>
+      <div class="dato"><span class="etiqueta">Estado:</span> <span id="estadoToma" class="estado pendiente">Pendiente</span></div>
+      <div class="dato"><span class="etiqueta">Método de confirmación:</span> <span id="metodoConfirmacion">Aún no confirmado</span></div>
+      <div class="botones">
+        <button class="btn-principal" onclick="marcarTomado()">Marcar como tomado</button>
+        <button class="btn-secundario" onclick="confirmarDesdeApp()">Confirmar desde app</button>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Medicamento</h2>
+      <div class="dato"><span class="etiqueta">Nombre:</span> Losartán</div>
+      <div class="dato"><span class="etiqueta">Dosis:</span> 1 tableta</div>
+      <div class="dato"><span class="etiqueta">Frecuencia:</span> Cada 8 horas</div>
+      <div class="dato"><span class="etiqueta">Pastillas restantes:</span> <span id="pastillas">18</span></div>
+      <div class="dato"><span class="etiqueta">Nivel de reserva:</span></div>
+      <div class="barra">
+        <div id="barraPastillas" class="progreso" style="width: 72%;">72%</div>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Alertas</h2>
+      <div class="dato"><span class="etiqueta">Estado general:</span> <span id="alertaGeneral" class="estado normal">Sin alertas críticas</span></div>
+      <div class="dato"><span class="etiqueta">Alarma sonora:</span> Activa</div>
+      <div class="dato"><span class="etiqueta">LED de aviso:</span> Activo</div>
+      <div class="dato"><span class="etiqueta">Conectividad:</span> Estable</div>
+      <div class="botones">
+        <button class="btn-principal" onclick="activarAlerta()">Generar alerta</button>
+        <button class="btn-secundario" onclick="restablecerSistema()">Restablecer estado</button>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Notificaciones</h2>
+      <ul class="lista-notificaciones" id="listaNotificaciones">
+        <li>11:00 - Recordatorio enviado al celular del usuario</li>
+        <li>10:30 - Dispositivo sincronizado correctamente</li>
+        <li>06:00 - Toma matutina confirmada</li>
+      </ul>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Estadísticas</h2>
+      <div class="dato"><span class="etiqueta">Cumplimiento general:</span></div>
+      <div class="barra">
+        <div class="progreso" id="barraCumplimiento" style="width: 85%;">85%</div>
+      </div>
+      <div class="dato" style="margin-top: 14px;"><span class="etiqueta">Tomas realizadas:</span> <span id="realizadas">17</span></div>
+      <div class="dato"><span class="etiqueta">Tomas pendientes:</span> <span id="pendientes">2</span></div>
+      <div class="dato"><span class="etiqueta">Tomas omitidas:</span> 1</div>
+    </div>
+
+    <div class="tarjeta tarjeta-ancha">
+      <h2>Historial de Tomas</h2>
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Medicamento</th>
+              <th>Estado</th>
+              <th>Confirmación</th>
+            </tr>
+          </thead>
+          <tbody id="tablaHistorial">
+            <tr>
+              <td>18/04/2026</td>
+              <td>06:00</td>
+              <td>Losartán 50 mg</td>
+              <td>Tomado</td>
+              <td>Botón físico</td>
+            </tr>
+            <tr>
+              <td>18/04/2026</td>
+              <td>10:00</td>
+              <td>Vitamina B</td>
+              <td>Tomado</td>
+              <td>Aplicación móvil</td>
+            </tr>
+            <tr>
+              <td>17/04/2026</td>
+              <td>22:00</td>
+              <td>Losartán 50 mg</td>
+              <td>Tomado</td>
+              <td>Página web</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    Mi Dosis - Aplicación web de control de medicación
+  </footer>
+
+  <script>
+    function agregarNotificacion(texto) {
+      let lista = document.getElementById("listaNotificaciones");
+      let item = document.createElement("li");
+      item.textContent = texto;
+      lista.prepend(item);
+    }
+
+    function actualizarPastillas() {
+      let pastillas = document.getElementById("pastillas");
+      let cantidad = parseInt(pastillas.textContent);
+
+      if (cantidad > 0) {
+        cantidad = cantidad - 1;
+        pastillas.textContent = cantidad;
+
+        let porcentaje = cantidad * 4;
+        if (porcentaje < 0) {
+          porcentaje = 0;
+        }
+
+        let barra = document.getElementById("barraPastillas");
+        barra.style.width = porcentaje + "%";
+        barra.textContent = porcentaje + "%";
+      }
+    }
+
+    function actualizarContadores() {
+      let realizadas = document.getElementById("realizadas");
+      let pendientes = document.getElementById("pendientes");
+
+      let totalRealizadas = parseInt(realizadas.textContent);
+      let totalPendientes = parseInt(pendientes.textContent);
+
+      realizadas.textContent = totalRealizadas + 1;
+
+      if (totalPendientes > 0) {
+        pendientes.textContent = totalPendientes - 1;
+      }
+    }
+
+    function marcarTomado() {
+      document.getElementById("estadoToma").textContent = "Tomado";
+      document.getElementById("estadoToma").className = "estado tomado";
+      document.getElementById("metodoConfirmacion").textContent = "Página web";
+      document.getElementById("confirmacionApp").textContent = "No aplica";
+
+      actualizarPastillas();
+      actualizarContadores();
+
+      let tabla = document.getElementById("tablaHistorial");
+      let fila = `
+        <tr>
+          <td>18/04/2026</td>
+          <td>${document.getElementById("horaToma").textContent}</td>
+          <td>Losartán 50 mg</td>
+          <td>Tomado</td>
+          <td>Página web</td>
+        </tr>
+      `;
+      tabla.innerHTML = fila + tabla.innerHTML;
+
+      agregarNotificacion("14:00 - Toma confirmada desde la página web");
+    }
+
+    function confirmarDesdeApp() {
+      document.getElementById("estadoToma").textContent = "Tomado";
+      document.getElementById("estadoToma").className = "estado tomado";
+      document.getElementById("metodoConfirmacion").textContent = "Aplicación móvil";
+      document.getElementById("confirmacionApp").textContent = "Confirmado";
+
+      actualizarPastillas();
+      actualizarContadores();
+
+      let tabla = document.getElementById("tablaHistorial");
+      let fila = `
+        <tr>
+          <td>18/04/2026</td>
+          <td>${document.getElementById("horaToma").textContent}</td>
+          <td>Losartán 50 mg</td>
+          <td>Tomado</td>
+          <td>Aplicación móvil</td>
+        </tr>
+      `;
+      tabla.innerHTML = fila + tabla.innerHTML;
+
+      agregarNotificacion("14:00 - Toma confirmada desde la aplicación móvil");
+    }
+
+    function enviarRecordatorio() {
+      document.getElementById("recordatorioEstado").textContent = "Sí";
+      agregarNotificacion("11:05 - Recordatorio enviado manualmente al celular");
+      alert("Recordatorio enviado a la aplicación móvil.");
+    }
+
+    function sincronizarApp() {
+      document.getElementById("syncApp").textContent = "18/04/2026 - 11:10";
+      document.getElementById("estadoApp").textContent = "Conectada";
+      agregarNotificacion("11:10 - Aplicación móvil sincronizada correctamente");
+      alert("Aplicación sincronizada correctamente.");
+    }
+
+    function activarAlerta() {
+      document.getElementById("alertaGeneral").textContent = "Alerta activa";
+      document.getElementById("alertaGeneral").className = "estado alerta";
+      document.getElementById("conexion").textContent = "Revisar estado";
+      document.getElementById("conexion").className = "estado offline";
+      agregarNotificacion("11:12 - Se activó una alerta del sistema");
+    }
+
+    function restablecerSistema() {
+      document.getElementById("alertaGeneral").textContent = "Sin alertas críticas";
+      document.getElementById("alertaGeneral").className = "estado normal";
+      document.getElementById("conexion").textContent = "En línea";
+      document.getElementById("conexion").className = "estado online";
+      document.getElementById("sincronizacion").textContent = "18/04/2026 - 10:30";
+      agregarNotificacion("11:15 - Sistema restablecido correctamente");
+    }
+  </script>
+
+</body>
+</html>
